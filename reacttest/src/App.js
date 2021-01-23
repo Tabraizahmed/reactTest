@@ -14,11 +14,12 @@ export default class App extends React.Component {
     this.fetchCities();
   };
 
-  fetchCities = () => {
+  fetchCities = (searchString) => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(
-          this.setState({ cities: window.Cities }, () => {
+          
+          this.setState({ cities: searchString === undefined ? window.Cities : window.Cities.filter((city)=>city.name.toLowerCase() === searchString.toLowerCase()) }, () => {
             this.renderCities(this.state.cities);
           })
         );
