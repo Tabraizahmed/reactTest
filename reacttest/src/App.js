@@ -7,7 +7,8 @@ export default class App extends React.Component {
     super();
     this.state = {
       cities: [],
-      searchString:""
+      searchString: "",
+      loading:false
     };
   }
 
@@ -16,11 +17,12 @@ export default class App extends React.Component {
   };
 
   fetchCities = (searchString) => {
+    this.setState({ loading: true });
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(
           
-          this.setState({ cities: searchString === undefined ? window.Cities : window.Cities.filter((city)=>city.name.toLowerCase() === searchString.toLowerCase()) }, () => {
+          this.setState({loading:false,cities: searchString === undefined ? window.Cities : window.Cities.filter((city)=>city.name.toLowerCase() === searchString.toLowerCase()) }, () => {
             this.renderCities(this.state.cities);
           })
         );
@@ -66,7 +68,9 @@ export default class App extends React.Component {
                 <th>Population</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {this.state.loading===true?"searching...":""}
+            </tbody>
           </table>
         </div>
       </div>
