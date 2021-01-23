@@ -8,7 +8,8 @@ export default class App extends React.Component {
     this.state = {
       cities: [],
       searchString: "",
-      loading:false
+      loading: false,
+      isSearchBtnVisible:true
     };
   }
 
@@ -32,6 +33,7 @@ export default class App extends React.Component {
 
   searchCities = () => {
     this.fetchCities(this.state.searchString);
+    this.setState({ isSearchBtnVisible: false });
   }
 
   renderCities = (cities) => {
@@ -50,16 +52,24 @@ export default class App extends React.Component {
     citiesTableBody.innerHTML = rowsHtml;
   };
 
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  onBlur = (e) => {
+    if (this.state.isSearchBtnVisible) {
+      this.setState({ searchString: e.target.value });
+      return;
+    }
+     this.fetchCities(e.target.value);
   }
-
+  
   render() {
     return (
       <div className='App'>
         <div id='challenge'>
-          <input type='text' onChange={this.onChange} name="searchString" />
+          <input type='text' onBlur={this.onBlur} name="searchString" />
+          {
+            this.state.isSearchBtnVisible === true ?
           <button onClick={this.searchCities}>Search</button>
+              :""
+          }
           <table id='cities-table'>
             <thead>
               <tr>
