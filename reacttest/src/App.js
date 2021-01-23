@@ -1,25 +1,64 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import './cities';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends React.Component {
+  constructor(props) {
+    super();
+    this.state = {
+      cities: [],
+    };
+  }
+
+  componentDidMount = () => {
+    this.fetchCities();
+  };
+
+  fetchCities = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(
+          this.setState({ cities: window.Cities }, () => {
+            this.renderCities(this.state.cities);
+          })
+        );
+      }, 2000);
+    });
+  };
+
+  renderCities = (cities) => {
+    const citiesTableBody = document.querySelector('#cities-table tbody');
+    const rowsHtml = cities
+      .map(
+        (city) => `
+    <tr>
+      <td>${city.name}</td>
+      <td>${city.country}</td>
+      <td>${city.population}</td>
+    </tr>
+  `
+      )
+      .join('');
+    citiesTableBody.innerHTML = rowsHtml;
+  };
+  render() {
+    return (
+      <div className='App'>
+        <div id='challenge'>
+          <input type='text' />
+          <button>Search</button>
+          <table id='cities-table'>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Population</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 }
-
-export default App;
