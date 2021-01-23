@@ -7,6 +7,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       cities: [],
+      searchString:""
     };
   }
 
@@ -27,6 +28,10 @@ export default class App extends React.Component {
     });
   };
 
+  searchCities = () => {
+    this.fetchCities(this.state.searchString);
+  }
+
   renderCities = (cities) => {
     const citiesTableBody = document.querySelector('#cities-table tbody');
     const rowsHtml = cities
@@ -42,12 +47,17 @@ export default class App extends React.Component {
       .join('');
     citiesTableBody.innerHTML = rowsHtml;
   };
+
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
   render() {
     return (
       <div className='App'>
         <div id='challenge'>
-          <input type='text' />
-          <button>Search</button>
+          <input type='text' onChange={this.onChange} name="searchString" />
+          <button onClick={this.searchCities}>Search</button>
           <table id='cities-table'>
             <thead>
               <tr>
